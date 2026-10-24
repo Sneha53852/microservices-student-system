@@ -1,0 +1,21 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block content%}
+    <h1>Student Content</h1>
+    <p>This is the student content page.</p>
+
+    <table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Valid</th>
+        <th>Image</th>
+    </tr>
+    {% for student in students %}
+    <tr>
+        <td>{{ student.name }}</td>
+        <td>{{ student.valid }}</td>
+        <td><img src="{{student.image.url }}" width="100"></td>
+    </tr>
+    {% endfor %}
+
+{% endblock %}

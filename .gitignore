@@ -1,0 +1,15 @@
+# virtual environments (rebuilt by Docker, never committed)
+my_env/
+myenv/
+gw_env/
+.venv/
+
+# python
+__pycache__/
+*.pyc
+
+# secrets and local data
+.env
+*.sqlite3
+media/
+staticfiles/

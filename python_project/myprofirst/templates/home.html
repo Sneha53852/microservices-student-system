@@ -1,0 +1,38 @@
+{%extends "base.html"%}
+{% load static%}
+
+{%block content%}
+    <h1>hello {{ name}} </h1>
+    <p>Age: {{ age }}</p>
+
+<img src = "{%static 'image/photo.jpg'%}">
+
+<form action='add/' method="POST">
+    {% csrf_token %}
+    <input type="text" name="num1">
+    <input type="text" name="num2">
+    <button type="submit">Add</button>
+</form>
+
+<br>
+<br>
+
+<form action='teacher/' method="POST">
+    {% csrf_token %}
+    <input type="text" name="name">
+    <input type="text" name="feed_back">
+    <button type="submit">Submit</button>
+</form>
+
+
+
+<br><br>
+<form action='updateteacher/{{ id }}' method="POST">
+    {% csrf_token %}
+    <input type="integer" name="id">
+    <input type="text" name="name">
+    <input type="text" name="feed_back">
+    <button type="submit">Submit</button>
+</form>
+
+{%endblock%}

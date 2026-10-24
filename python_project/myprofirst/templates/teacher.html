@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<form action='teacher/' method="POST">
+    {% csrf_token %}
+    <input type="text" name="name">
+    <input type="text" name="feed_back">
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}
