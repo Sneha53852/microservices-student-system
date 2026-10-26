@@ -21,5 +21,5 @@ urlpatterns = [
     path('login/',login, name = 'login'),
     path('StudentListView/', StudentListView.as_view(), name='student-list'),
     path('StudentListView1/<id>/', StudentListView1.as_view(), name='student-detail'),
-    path('fastapi/students/', fastapi_students),
+    path('fastapi_student/',fastapi_students)
 ]

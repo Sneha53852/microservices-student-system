@@ -171,10 +171,19 @@ class StudentListView1(UpdateAPIView,DestroyAPIView):
     serializer_class = StudentSerializer
     lookup_field = 'id'
 
+
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def fastapi_students(request):
+
+    # Grab the same token to forward to FastAPI
+    forward_headers = {
+        'Authorization': request.headers.get('Authorization')
+    }
+
     try:
-        data = fastapi_client.get("/studentss/")      # 1. call FastAPI and WAIT for the answer
-    except FastAPIError as e:                          # 2a. if it failed...
-        return Response({"error": str(e)}, status=e.status_code or 502)   # ...return the error and STOP here
-    return Response(data)                              # 2b. if it succeeded, continue to here
+        data = fastapi_client.get("/studentss/", headers=forward_headers)      
+    except FastAPIError as e:                         
+        return Response({"error": str(e)}, status=e.status_code or 502)   
+    return Response(data)                             
+

@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException,status
 from sqlalchemy.orm import Session
 from models import *
 import databasemodels
@@ -7,6 +7,8 @@ import jwt
 from datetime import datetime, timedelta, timezone
 import secrets
 from database import get_db
+import os
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 app = FastAPI()
 
@@ -37,8 +39,19 @@ def add_student(p:student):
     products.append(p)
     return products
 
-SECRET_KEY = secrets.token_hex(32)
+SECRET_KEY = os.environ.get("JWT_SECRET_KEY", "fallback-secret-key")
 ALGORITHM = "HS256"
+security = HTTPBearer()
+
+def verify_jwt(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    token = credentials.credentials
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
 
 
 @app.post("/login")
@@ -74,7 +87,7 @@ def login(data: Login, db: Session = Depends(get_db)):
 
 
 @app.get("/studentss/")
-def get_students(db: Session = Depends(get_db)):
+def get_students(user: dict = Depends(verify_jwt), db: Session = Depends(get_db)):
     students = db.query(databasemodels.student).all()
 
     return [
